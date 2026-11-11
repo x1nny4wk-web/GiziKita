@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pemantauan MBG</title>
+    <style>
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f0f4ff; color: #33415c; }
+
+header { background: linear-gradient(135deg, #4361c4, #7299e8); color: #fff; text-align: center; padding: 38px 20px 40px; border-radius: 0 0 30px 30px; }
+header h1 { margin: 0 0 10px; font-size: 2.3rem; }
+header p { margin: 0; font-size: 1.05rem; }
+
+main { max-width: 1000px; margin: 0 auto; padding: 50px 20px 60px; text-align: center; }
+main h2 { margin: 0 0 14px; color: #3a56c0; font-size: 1.9rem; }
+.deskripsi { margin: 0 0 30px; color: #5f6f94; }
+
+.menu { display: flex; justify-content: center; flex-wrap: wrap; gap: 30px; }
+.card { width: 318px; padding: 46px 24px 34px; background: #fff; border-radius: 18px; box-shadow: 0 6px 18px rgba(67, 97, 196, .12); }
+.card h3 { margin: 0 0 14px; color: #4361c4; font-size: 1.25rem; }
+.card p { margin: 0 0 26px; color: #6b7a9a; font-size: .95rem; line-height: 1.6; }
+
+button { padding: 12px 22px; background: #4361c4; color: #fff; border: 0; border-radius: 8px; font: bold .9rem Arial, Helvetica, sans-serif; cursor: pointer; }
+button:hover { background: #344fa8; }
+button:disabled { opacity: .6; cursor: wait; }
+
+.form-container { max-width: 480px; margin: 0 auto; padding: 34px 30px; background: #fff; border-radius: 18px; box-shadow: 0 6px 18px rgba(67, 97, 196, .12); text-align: left; }
+.form-container h2, .form-container .deskripsi { text-align: center; }
+label { display: block; margin: 16px 0 6px; font-weight: bold; font-size: .9rem; }
+input, select { width: 100%; padding: 11px 12px; background: #fff; border: 1px solid #cbd5ea; border-radius: 8px; font: inherit; }
+input:focus, select:focus { outline: none; border-color: #4361c4; box-shadow: 0 0 0 3px rgba(67, 97, 196, .18); }
+input[type=file] { background: #f6f8ff; }
+form button[type=submit] { width: 100%; margin-top: 24px; padding: 13px; }
+#pesan { min-height: 1em; margin: 14px 0 0; text-align: center; font-weight: bold; }
+.kembali { display: block; margin-top: 18px; text-align: center; color: #4361c4; font-weight: bold; font-size: .9rem; text-decoration: none; }
+
+.pantau { max-width: 1100px; text-align: left; }
+.pantau h2 { text-align: center; }
+.pantau .deskripsi { text-align: center; }
+.pantau h3 { margin: 32px 0 12px; color: #3a56c0; }
+.ringkasan { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; }
+.kartu { min-width: 210px; padding: 22px 28px; background: #fff; border-radius: 18px; box-shadow: 0 6px 18px rgba(67, 97, 196, .12); text-align: center; color: #6b7a9a; font-size: .9rem; }
+.kartu b { display: block; color: #4361c4; font-size: 2.1rem; }
+.filter { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+.filter select, .filter input { width: auto; flex: 1 1 150px; }
+.tabel-wrap { overflow-x: auto; background: #fff; border-radius: 14px; box-shadow: 0 6px 18px rgba(67, 97, 196, .12); }
+table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+th, td { padding: 11px 14px; text-align: left; white-space: nowrap; border-bottom: 1px solid #eef1fb; }
+th { background: #e8eeff; color: #3a56c0; }
+img.bukti { width: 56px; height: 56px; object-fit: cover; border-radius: 8px; cursor: pointer; }
+#modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, .8); text-align: center; cursor: pointer; }
+#modal img { max-width: 90%; max-height: 90%; margin-top: 2%; border-radius: 10px; }
+
+footer { padding: 28px 20px; background: #263c7a; color: #fff; text-align: center; font-size: .9rem; }
+footer p { margin: 0; }
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>GiziKita</h1>
+    <p>Pemantauan Data MBG</p>
+</header>
+
+<main class="pantau">
+    <h2>Pemantauan Data MBG</h2>
+    <p class="deskripsi">Data masuk otomatis dari form pengambilan dan pengembalian.</p>
+
+    <div class="ringkasan">
+        <div class="kartu"><b id="totalAmbil">0</b>Total Diambil</div>
+        <div class="kartu"><b id="totalKembali">0</b>Total Dikembalikan</div>
+        <div class="kartu"><b id="totalSelisih">0</b>Selisih (belum kembali)</div>
+    </div>
+
+    <h3>Rekap per Kelas</h3>
+    <div class="tabel-wrap">
+        <table>
+            <thead><tr><th>Kelas</th><th>Diambil</th><th>Dikembalikan</th><th>Selisih</th></tr></thead>
+            <tbody id="rekap"></tbody>
+        </table>
+    </div>
+
+    <h3>Riwayat</h3>
+    <div class="filter">
+        <select id="fJenis">
+            <option value="">Semua Jenis</option>
+            <option value="pengambilan">Pengambilan</option>
+            <option value="pengembalian">Pengembalian</option>
+        </select>
+        <select id="fKelas"><option value="">Semua Kelas</option></select>
+        <input type="date" id="fTanggal">
+        <input type="text" id="fCari" placeholder="Cari nama...">
+        <button type="button" id="reset">Reset</button>
+    </div>
+    <div class="tabel-wrap">
+        <table>
+            <thead><tr><th>No</th><th>Hari</th><th>Tanggal</th><th>Jam</th><th>Jenis</th><th>Nama</th><th>Kelas</th><th>Jumlah</th><th>Foto</th></tr></thead>
+            <tbody id="riwayat"><tr><td colspan="9">Memuat data...</td></tr></tbody>
+        </table>
+    </div>
+</main>
+
+<div id="modal"><img id="modalImg" alt="Foto bukti"></div>
+
+<footer>
+    <p>Dikembangkan oleh Kelompok 3</p>
+</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ===== GANTI DENGAN CONFIG DARI FIREBASE (Project settings > Your apps > Web app) =====
+const firebaseConfig = {
+  apiKey: "ISI_DARI_FIREBASE",
+  authDomain: "ISI_DARI_FIREBASE",
+  projectId: "ISI_DARI_FIREBASE",
+  storageBucket: "ISI_DARI_FIREBASE",
+  messagingSenderId: "ISI_DARI_FIREBASE",
+  appId: "ISI_DARI_FIREBASE"
+};
+// ======================================================================================
+
+const db = getFirestore(initializeApp(firebaseConfig));
+const mbgRef = collection(db, "mbg");
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+let semua = [];
+
+onSnapshot(
+  query(mbgRef, orderBy("waktu", "desc")),
+  (snap) => {
+    semua = snap.docs.map((d) => ({ id: d.id, ...d.data({ serverTimestamps: "estimate" }) }));
+    isiKelas();
+    render();
+  },
+  (err) => {
+    console.error(err);
+    $("riwayat").innerHTML = '<tr><td colspan="9">Gagal memuat data. Cek config dan rules Firebase.</td></tr>';
+  }
+);
+
+// Daftar kelas diambil dari data yang masuk
+function isiKelas() {
+  const pilih = $("fKelas").value;
+  const daftar = [...new Set(semua.map((d) => d.kelas))].sort();
+  $("fKelas").innerHTML = '<option value="">Semua Kelas</option>' +
+    daftar.map((k) => `<option value="${esc(k)}">${esc(k)}</option>`).join("");
+  $("fKelas").value = pilih;
+}
+
+function render() {
+  // Ringkasan dan rekap mengikuti filter tanggal
+  const tgl = $("fTanggal").value;
+  const dataTgl = semua.filter((d) => !tgl || d.tanggal === tgl);
+
+  const rekap = {};
+  let ambil = 0, kembali = 0;
+  dataTgl.forEach((d) => {
+    const r = (rekap[d.kelas] ??= { ambil: 0, kembali: 0 });
+    if (d.jenis === "pengambilan") { r.ambil += d.jumlah; ambil += d.jumlah; }
+    else { r.kembali += d.jumlah; kembali += d.jumlah; }
+  });
+  $("totalAmbil").textContent = ambil;
+  $("totalKembali").textContent = kembali;
+  $("totalSelisih").textContent = ambil - kembali;
+  $("rekap").innerHTML = Object.keys(rekap).sort().map((k) =>
+    `<tr><td>${esc(k)}</td><td>${rekap[k].ambil}</td><td>${rekap[k].kembali}</td><td>${rekap[k].ambil - rekap[k].kembali}</td></tr>`
+  ).join("") || '<tr><td colspan="4">Belum ada data.</td></tr>';
+
+  // Riwayat mengikuti semua filter
+  const jenis = $("fJenis").value, kelas = $("fKelas").value;
+  const cari = $("fCari").value.trim().toLowerCase();
+  const hasil = dataTgl.filter((d) =>
+    (!jenis || d.jenis === jenis) &&
+    (!kelas || d.kelas === kelas) &&
+    (!cari || (d.nama || "").toLowerCase().includes(cari))
+  );
+
+  $("riwayat").innerHTML = hasil.length ? hasil.map((d, i) => {
+    const jam = d.waktu ? d.waktu.toDate().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }) : "-";
+    return `<tr>
+      <td>${i + 1}</td><td>${esc(d.hari)}</td><td>${esc(d.tanggal)}</td><td>${jam}</td>
+      <td>${esc(String(d.jenis).toUpperCase())}</td><td>${esc(d.nama)}</td><td>${esc(d.kelas)}</td><td>${d.jumlah}</td>
+      <td><img src="${esc(d.foto)}" alt="Bukti" class="bukti"></td>
+    </tr>`;
+  }).join("") : '<tr><td colspan="9">Belum ada data.</td></tr>';
+}
+
+["fJenis", "fKelas", "fTanggal", "fCari"].forEach((id) => $(id).addEventListener("input", render));
+$("reset").addEventListener("click", () => {
+  ["fJenis", "fKelas", "fTanggal", "fCari"].forEach((id) => ($(id).value = ""));
+  render();
+});
+
+// Klik foto untuk memperbesar, klik lagi untuk menutup
+$("riwayat").addEventListener("click", (e) => {
+  if (e.target.tagName === "IMG") {
+    $("modalImg").src = e.target.src;
+    $("modal").style.display = "block";
+  }
+});
+$("modal").addEventListener("click", () => ($("modal").style.display = "none"));
+</script>
+
+</body>
+</html>
