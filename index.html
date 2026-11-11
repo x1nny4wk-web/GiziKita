@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GiziKita</title>
+    <style>
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f0f4ff; color: #33415c; }
+
+header { background: linear-gradient(135deg, #4361c4, #7299e8); color: #fff; text-align: center; padding: 38px 20px 40px; border-radius: 0 0 30px 30px; }
+header h1 { margin: 0 0 10px; font-size: 2.3rem; }
+header p { margin: 0; font-size: 1.05rem; }
+
+main { max-width: 1000px; margin: 0 auto; padding: 50px 20px 60px; text-align: center; }
+main h2 { margin: 0 0 14px; color: #3a56c0; font-size: 1.9rem; }
+.deskripsi { margin: 0 0 30px; color: #5f6f94; }
+
+.menu { display: flex; justify-content: center; flex-wrap: wrap; gap: 30px; }
+.card { width: 318px; padding: 46px 24px 34px; background: #fff; border-radius: 18px; box-shadow: 0 6px 18px rgba(67, 97, 196, .12); }
+.card h3 { margin: 0 0 14px; color: #4361c4; font-size: 1.25rem; }
+.card p { margin: 0 0 26px; color: #6b7a9a; font-size: .95rem; line-height: 1.6; }
+
+button { padding: 12px 22px; background: #4361c4; color: #fff; border: 0; border-radius: 8px; font: bold .9rem Arial, Helvetica, sans-serif; cursor: pointer; }
+button:hover { background: #344fa8; }
+button:disabled { opacity: .6; cursor: wait; }
+
+.form-container { max-width: 480px; margin: 0 auto; padding: 34px 30px; background: #fff; border-radius: 18px; box-shadow: 0 6px 18px rgba(67, 97, 196, .12); text-align: left; }
+.form-container h2, .form-container .deskripsi { text-align: center; }
+label { display: block; margin: 16px 0 6px; font-weight: bold; font-size: .9rem; }
+input, select { width: 100%; padding: 11px 12px; background: #fff; border: 1px solid #cbd5ea; border-radius: 8px; font: inherit; }
+input:focus, select:focus { outline: none; border-color: #4361c4; box-shadow: 0 0 0 3px rgba(67, 97, 196, .18); }
+input[type=file] { background: #f6f8ff; }
+form button[type=submit] { width: 100%; margin-top: 24px; padding: 13px; }
+#pesan { min-height: 1em; margin: 14px 0 0; text-align: center; font-weight: bold; }
+.kembali { display: block; margin-top: 18px; text-align: center; color: #4361c4; font-weight: bold; font-size: .9rem; text-decoration: none; }
+
+.pantau { max-width: 1100px; text-align: left; }
+.pantau h2 { text-align: center; }
+.pantau .deskripsi { text-align: center; }
+.pantau h3 { margin: 32px 0 12px; color: #3a56c0; }
+.ringkasan { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; }
+.kartu { min-width: 210px; padding: 22px 28px; background: #fff; border-radius: 18px; box-shadow: 0 6px 18px rgba(67, 97, 196, .12); text-align: center; color: #6b7a9a; font-size: .9rem; }
+.kartu b { display: block; color: #4361c4; font-size: 2.1rem; }
+.filter { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+.filter select, .filter input { width: auto; flex: 1 1 150px; }
+.tabel-wrap { overflow-x: auto; background: #fff; border-radius: 14px; box-shadow: 0 6px 18px rgba(67, 97, 196, .12); }
+table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+th, td { padding: 11px 14px; text-align: left; white-space: nowrap; border-bottom: 1px solid #eef1fb; }
+th { background: #e8eeff; color: #3a56c0; }
+img.bukti { width: 56px; height: 56px; object-fit: cover; border-radius: 8px; cursor: pointer; }
+#modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, .8); text-align: center; cursor: pointer; }
+#modal img { max-width: 90%; max-height: 90%; margin-top: 2%; border-radius: 10px; }
+
+footer { padding: 28px 20px; background: #263c7a; color: #fff; text-align: center; font-size: .9rem; }
+footer p { margin: 0; }
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>GiziKita</h1>
+    <p>Sistem Pengambilan dan Pengembalian MBG</p>
+</header>
+
+<main>
+    <h2>Selamat Datang</h2>
+    <p class="deskripsi">Silakan pilih layanan yang ingin digunakan.</p>
+
+    <div class="menu">
+        <div class="card">
+            <h3>Pengambilan MBG</h3>
+            <p>Melakukan pencatatan data pengambilan MBG.</p>
+            <a href="pengambilan.html"><button>Pengambilan</button></a>
+        </div>
+
+        <div class="card">
+            <h3>Pengembalian MBG</h3>
+            <p>Melakukan pencatatan data pengembalian MBG.</p>
+            <a href="pengembalian.html"><button>Pengembalian</button></a>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>Dikembangkan oleh Kelompok 3</p>
+</footer>
+
+</body>
+</html>
